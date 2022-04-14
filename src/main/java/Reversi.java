@@ -9,8 +9,8 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 public class Reversi extends JPanel{
-    public int [][] field = new int[6][6];
-    public int fieldSize = 6;
+    public static int [][] field = new int[6][6];
+    public static int fieldSize = 6;
     public JPanel panel = new JPanel();
     public int turn = 2;
     public int fontX = 10;
@@ -25,7 +25,7 @@ public class Reversi extends JPanel{
         panel.setPreferredSize(new Dimension(361,385));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.getContentPane().setBackground(new Color(133,165,226));
+        //frame.getContentPane().setBackground(new Color(133,165,226));
 
         JMenuBar menuBar = new JMenuBar();
         JMenu file = new JMenu("");
@@ -56,10 +56,11 @@ public class Reversi extends JPanel{
                 fontX = 10;
                 fontY = 375;
                 frame.setLocation(450,150);
-                frame.setSize(367,437);
-                frame.setPreferredSize(new Dimension(361,385));
+                frame.setSize(375,437);
+                frame.setPreferredSize(new Dimension(375,385));
                 field = new int[6][6];
                 turn = 2;
+                start();
                 panel.repaint();
             }
         });
@@ -70,11 +71,11 @@ public class Reversi extends JPanel{
                 fontX = 10;
                 fontY = 498;
                 frame.setLocation(390, 80);
-                frame.setPreferredSize(new Dimension(500, 505));
+                frame.setPreferredSize(new Dimension(375 + 2*61, 505));
                 frame.setSize(500, 557);
                 field = new int[8][8];
                 turn = 2;
-                //start();
+                start();
                 //count();
                 panel.repaint();
             }
@@ -87,11 +88,11 @@ public class Reversi extends JPanel{
                 fontX = 10;
                 fontY = 617;
                 frame.setLocation(330, 30);
-                frame.setSize(637, 677);
-                frame.setPreferredSize(new Dimension(631, 625));
+                frame.setSize(375 + 4*61, 677);
+                frame.setPreferredSize(new Dimension(375 + 4*61, 625));
                 field = new int[10][10];
                 turn = 2;
-                //start();
+                start();
                 //count();
                 panel.repaint();
             }
@@ -104,14 +105,15 @@ public class Reversi extends JPanel{
                 fontX = 10;
                 fontY = 835;
                 frame.setLocation(270, -0);
-                frame.setSize(741, 800);
-                frame.setPreferredSize(new Dimension(741, 800));
+                frame.setSize(375 + 6*61, 800);
+                frame.setPreferredSize(new Dimension(375 + 6*61, 800));
                 field = new int[12][12];
                 turn = 2;
-                //start();
+                start();
                 //count();
                 panel.repaint();
             }
+
 
         });
 
@@ -123,10 +125,31 @@ public class Reversi extends JPanel{
                 super.paint(g);
                 for(int i = 0; i < fieldSize; i++){
                     for(int j = 0; j < fieldSize; j++){
-                        g.setColor(Color.ORANGE);
-                        g.fillRect(j*60, i*60, 60,60 );
+                        if ((i + j) % 2 == 0) {
+                            g.setColor(Color.ORANGE);
+                            g.fillRect(j*60, i*60, 60,60 );
+                        }
+                        else{
+                            g.setColor(Color.YELLOW);
+                            g.fillRect(j*60, i*60, 60,60 );
+                        }
                         g.setColor(Color.black);
                         g.drawRect(j*60, i*60, 60,60);
+                    }
+                }
+
+                for(int i =0; i<field.length;i++){
+                    for(int j = 0; j <field[i].length;j++){
+                        switch (field [i][j]){
+                            case 1:
+                                g.setColor(Color.WHITE);
+                                g.fillOval(5+i * 60, 5+j * 60, 50, 50);
+                                break;
+                            case 2 :
+                                g.setColor(Color.BLACK);
+                                g.fillOval(5+i * 60, 5+j * 60, 50, 50);
+                                break;
+                        }
                     }
                 }
             }
@@ -134,14 +157,14 @@ public class Reversi extends JPanel{
             @Override
             public Dimension getPreferredSize(){
                 if (fieldSize == 6){
-                    return new Dimension(361,385);
+                    return new Dimension(375,385);
                 }else if(fieldSize == 8){
-                    return new Dimension(500, 505);
+                    return new Dimension(375 + 2*61, 505);
                 }else if(fieldSize == 10) {
-                    return new Dimension(631,625);
+                    return new Dimension(375 + 4*61,625);
                 }
                 else {
-                    return new Dimension(741,800);
+                    return new Dimension(375 + 6*61,800);
                 }
             }
         };
@@ -152,8 +175,17 @@ public class Reversi extends JPanel{
         frame.setVisible(true);
 
     }
+    public static void start(){
+        field[fieldSize/2][fieldSize/2] = 1;
+        field[(fieldSize/2)-1][(fieldSize/2)-1] = 1;
+        field[(fieldSize/2)-1][(fieldSize/2)] = 2;
+        field[(fieldSize/2)][(fieldSize/2)-1] = 2;
+    }
+
+
+
     public static void main(String[] args) {
-        //start();
+        start();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -161,6 +193,8 @@ public class Reversi extends JPanel{
             }
         });
     }
+
+
 
 }
 
