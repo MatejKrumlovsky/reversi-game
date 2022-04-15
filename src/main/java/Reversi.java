@@ -4,11 +4,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
-public class Reversi extends JPanel{
+public class Reversi extends JPanel implements MouseListener {
     public static int [][] field = new int[6][6];
     public static int fieldSize = 6;
     public JPanel panel = new JPanel();
@@ -46,6 +47,7 @@ public class Reversi extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 field = new int[fieldSize][fieldSize];
                 turn = 2;
+                start();
                 panel.repaint();
             }
         });
@@ -149,6 +151,10 @@ public class Reversi extends JPanel{
                                 g.setColor(Color.BLACK);
                                 g.fillOval(5+i * 60, 5+j * 60, 50, 50);
                                 break;
+                            case -2:
+                                g.setColor(Color.BLUE);
+                                g.fillRect(15+i *60, 15+j, 20, 20 );
+                                break;
                         }
                     }
                 }
@@ -171,16 +177,12 @@ public class Reversi extends JPanel{
 
         frame.add(panel);
         frame.setJMenuBar(menuBar);
+        panel.addMouseListener(this);
         frame.pack();
         frame.setVisible(true);
 
     }
-    public static void start(){
-        field[fieldSize/2][fieldSize/2] = 1;
-        field[(fieldSize/2)-1][(fieldSize/2)-1] = 1;
-        field[(fieldSize/2)-1][(fieldSize/2)] = 2;
-        field[(fieldSize/2)][(fieldSize/2)-1] = 2;
-    }
+
 
 
 
@@ -194,8 +196,80 @@ public class Reversi extends JPanel{
         });
     }
 
+    public static void start(){
+        field[fieldSize/2][fieldSize/2] = 1;
+        field[(fieldSize/2)-1][(fieldSize/2)-1] = 1;
+        field[(fieldSize/2)-1][(fieldSize/2)] = 2;
+        field[(fieldSize/2)][(fieldSize/2)-1] = 2;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent arg0) {
+            int x, y, i = 0, j = 0;
+            x = arg0.getX();
+            y = arg0.getY();
+        i = x / 60;
+        j = y / 60;
+        System.out.println(x +  ", " +y);
+        if (acceptedField(i, j)) {
+            if (turn == 1) {
+                field[i][j] = turn;
+                changeValue(i, j);
+                turn = 2;
+            } else {
+                field[i][j] = turn;
+                changeValue(i, j);
+                turn = 1;
+            }
+            //help();
+
+            panel.repaint();
+        }
+    }
 
 
+    boolean acceptedField(int m, int n){
+        if(n < fieldSize && m < fieldSize){
+            if (field[m][n] == -2){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void changeValue(int x, int y){
+        int notOnTurn = 0;
+        boolean isDone = false;
+        if(turn == 2){
+            notOnTurn = 1;
+        }
+        else {
+            notOnTurn = 2;
+        }
+    }
+
+
+
+
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+
+    }
 }
 
 
